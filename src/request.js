@@ -1,6 +1,7 @@
 export default class Request {
   static session = (...args) => new Request().session(...args);
   static intent = (...args) => new Request().intent(...args);
+  static audioPlayerEvent = (...args) => new Request().audioPlayerEvent(...args);
   static launchRequest = (...args) => new Request().launchRequest(...args);
   static sessionEndedRequest = (...args) => new Request().sessionEndedRequest(...args);
 
@@ -28,6 +29,16 @@ export default class Request {
           name: name,
           ...(Object.keys(slotData).length ? { slots: slotData } : null)
         }
+      }
+    });
+  }
+
+  audioPlayerEvent(name, token) {
+    return new Request({
+      ...this.state,
+      request: {
+        type: name,
+        token: token
       }
     });
   }

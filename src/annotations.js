@@ -21,3 +21,5 @@ export const Intent = (...names) => annotation(
     ), {})
   )
 );
+
+export const AudioPlayerEvent = (...names) => annotation(({ type = {} }) => names.indexOf(type) >= 0 );
