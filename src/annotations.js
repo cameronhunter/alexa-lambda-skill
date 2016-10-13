@@ -3,7 +3,7 @@ const annotation = (predicate, transform) => (skill, name) => {
 
   skill.route = function(request, context) {
     const args = transform ? [transform(request), request, context] : [request, context];
-    return route.call(this, request) || (predicate(request) && skill[name].apply(this, args));
+    return route.call(this, request, context) || (predicate(request) && skill[name].apply(this, args));
   };
 
   return skill;
