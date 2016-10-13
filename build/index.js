@@ -399,11 +399,12 @@ var isAuthorized = function isAuthorized() {
 
 var SkillAnnotation = function SkillAnnotation(options) {
   return function (Skill) {
-    return function (event, context, callback) {
+    return function (event, ctx, callback) {
       var _ref = event || {};
 
       var request = _ref.request;
       var session = _ref.session;
+      var context = _ref.context;
 
       var _ref2 = session || {};
 
@@ -412,7 +413,7 @@ var SkillAnnotation = function SkillAnnotation(options) {
 
 
       return isAuthorized(options, application).then(function () {
-        return new Skill(session).route(request) || Promise$1.reject(NotFound);
+        return new Skill(session).route(request, context) || Promise$1.reject(NotFound);
       }).then(function (response) {
         return typeof response.build === 'function' ? response.build(attributes) : response;
       }).then(function (response) {
@@ -459,8 +460,8 @@ var annotation = function annotation(predicate, transform) {
       return false;
     };
 
-    skill.route = function (request) {
-      var args = transform ? [transform(request), request] : [request];
+    skill.route = function (request, context) {
+      var args = transform ? [transform(request), request, context] : [request, context];
       return route.call(this, request) || predicate(request) && skill[name].apply(this, args);
     };
 

@@ -5,12 +5,12 @@ const isAuthorized = (expected = {}, actual = {}) => new Promise((resolve, rejec
   return isOK ? resolve() : reject(Unauthorized);
 });
 
-const SkillAnnotation = (options) => (Skill) => (event, context, callback) => {
-  const { request, session } = event || {};
+const SkillAnnotation = (options) => (Skill) => (event, ctx, callback) => {
+  const { request, session, context } = event || {};
   const { application, attributes } = session || {};
 
   return isAuthorized(options, application).then(() => {
-    return new Skill(session).route(request) || Promise.reject(NotFound);
+    return new Skill(session).route(request, context) || Promise.reject(NotFound);
   }).then(response => {
     return (typeof response.build === 'function') ? response.build(attributes) : response;
   }).then(response => {
