@@ -1,9 +1,9 @@
 const annotation = (predicate, transform) => (skill, name) => {
   const route = skill.route || (() => false);
 
-  skill.route = function(request) {
-    const args = transform ? [transform(request), request] : [request];
-    return route.call(this, request) || (predicate(request) && skill[name].apply(this, args));
+  skill.route = function(request, context) {
+    const args = transform ? [transform(request), request, context] : [request, context];
+    return route.call(this, request, context) || (predicate(request) && skill[name].apply(this, args));
   };
 
   return skill;
@@ -21,3 +21,5 @@ export const Intent = (...names) => annotation(
     ), {})
   )
 );
+
+export const AudioPlayerEvent = (...names) => annotation(({ type = {} }) => names.indexOf(type) >= 0 );
