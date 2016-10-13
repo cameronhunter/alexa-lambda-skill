@@ -462,7 +462,7 @@ var annotation = function annotation(predicate, transform) {
 
     skill.route = function (request, context) {
       var args = transform ? [transform(request), request, context] : [request, context];
-      return route.call(this, request) || predicate(request) && skill[name].apply(this, args);
+      return route.call(this, request, context) || predicate(request) && skill[name].apply(this, args);
     };
 
     return skill;
